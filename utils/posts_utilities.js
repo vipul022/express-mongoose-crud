@@ -3,7 +3,7 @@ const Post = require("../models/post");
 // get all posts
 // return a query
 const getAllPosts = function (req) {
-  return Post.find();
+  return Post.find(); //returns all posts
 };
 
 const addPost = function (req) {};

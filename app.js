@@ -32,11 +32,6 @@ mongoose.connect(
   }
 );
 
-app.get("/", (req, res) => {
-  console.log("get on /");
-  res.send("got your request");
-});
-
 app.use("/posts", postRouter);
 
 app.listen(port, () => {
