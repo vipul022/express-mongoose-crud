@@ -6,6 +6,8 @@ const {
   getAllPosts,
   addPost,
   getPostById,
+  deletePost,
+  updatePost,
 } = require("../utils/posts_utilities");
 
 let postId = null; //postId is given a global scope and is used in beforeEach below
@@ -42,7 +44,7 @@ beforeEach(async function () {
   // Load a test record in setupData
   // Use await so we can access the postId, which is used by some tests
   let post = await setupData();
-  postId = post._id; //this is used for testing getPostById below
+  postId = post._id; //this is used for testing getPostById and deletePost below
 });
 //created a function to create a post for testing
 function setupData() {
@@ -100,7 +102,7 @@ describe("getPostById", () => {
 });
 
 // addPost
-describe.only("addPost", () => {
+describe("addPost", () => {
   it("should add a post", async function () {
     // define a req object with expected structure
     const req = {
@@ -113,6 +115,38 @@ describe.only("addPost", () => {
     };
     //exec is not used as Post instance is returned instead of a query
     await addPost(req).save((err, post) => {
+      expect(post.title).toBe(req.body.title);
+    });
+  });
+});
+
+// deletePost
+describe("deletePost", () => {
+  it("should delete the specified post", async function () {
+    await deletePost(postId).exec(); //first deleted the post created in setupData above
+    await Post.findById(postId).exec((err, post) => {
+      // find the the post
+      expect(post).toBe(null);
+    });
+  });
+});
+
+// updatePost
+describe("updatePost", () => {
+  it("should update a post", async function () {
+    // set up a req object
+    const req = {
+      params: {
+        id: postId,
+      },
+      body: {
+        title: "Updated post",
+        username: "tester",
+        content: "This is an updated blog post!",
+        category: "",
+      },
+    };
+    await updatePost(req).exec((err, post) => {
       expect(post.title).toBe(req.body.title);
     });
   });

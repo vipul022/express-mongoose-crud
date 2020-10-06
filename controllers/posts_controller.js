@@ -48,10 +48,28 @@ const makePost = function (req, res) {
 };
 
 const removePost = function (req, res) {
-  deletePost(req);
+  // execute the query from deletePost
+  deletePost(req.params.id).exec((err) => {
+    if (err) {
+      res.status(500);
+      return res.json({
+        error: err.message,
+      });
+    }
+    res.sendStatus(204);
+  });
 };
 
 const changePost = function (req, res) {
-  updatePost(req);
+  updatePost(req).exec((err, post) => {
+    if (err) {
+      res.status(500);
+      return res.json({
+        error: err.message,
+      });
+    } else {
+      res.send(post);
+    }
+  });
 };
 module.exports = { getPosts, getPost, makePost, removePost, changePost };
