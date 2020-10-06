@@ -8,17 +8,22 @@ const {
 
 const getPosts = function (req, res) {
   // execute the query from getAllPosts
-  getAllPosts(req).exec((err, posts) => {
-    //here a callback is passed to exec function which takes error and results(posts ) as arguments
-    if (err) {
-      res.status(500);
-      return res.json({
-        error: err.message,
-      });
-    } else {
-      res.send(posts);
-    }
-  });
+  getAllPosts(req)
+    .sort({
+      //sorting the posts in descending order
+      modified_date: -1,
+    })
+    .exec((err, posts) => {
+      //here a callback is passed to exec function which takes error and results(posts ) as arguments
+      if (err) {
+        res.status(500);
+        return res.json({
+          error: err.message,
+        });
+      } else {
+        res.send(posts);
+      }
+    });
 };
 
 const getPost = function (req, res) {
