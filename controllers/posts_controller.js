@@ -22,11 +22,29 @@ const getPosts = function (req, res) {
 };
 
 const getPost = function (req, res) {
-  getPostById(req);
+  getPostById(req).exec((err, post) => {
+    if (err) {
+      res.status(400);
+      return res.send("Post not found");
+    } else {
+      res.send(post);
+    }
+  });
 };
 
 const makePost = function (req, res) {
-  addPost(req);
+  // exec function is not used here as this function is returning the Post instance from addPost not the query
+  addPost(req).save((err, post) => {
+    //saving the Post instance
+    if (err) {
+      res.status(500);
+      return res.json({
+        error: err.message,
+      });
+    }
+    res.status(201);
+    res.send(post);
+  });
 };
 
 const removePost = function (req, res) {
