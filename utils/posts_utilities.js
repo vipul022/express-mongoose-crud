@@ -17,6 +17,21 @@ const addPost = function (req) {
   return new Post(req.body); //returns new Post instance
 };
 
+//add comment to a particular post
+//As is is async, it  will return a promise
+const addComment = async function (req) {
+  console.log("req => ", req);
+  let post = await Post.findById(req.params.postId); //look up for the particular post
+  let newComment = {
+    username: req.body.username,
+    comment: req.body.comment,
+  };
+  post.comments.push(newComment); //pushed new comment to an array of comments
+  return Post.findByIdAndUpdate(req.params.postId, post, {
+    new: true, //new: true returns the modified object
+  });
+};
+
 const getPostById = function (req) {
   return Post.findById(req.params.id); //returns a specific post
 };
@@ -33,4 +48,11 @@ const updatePost = function (req) {
     new: true,
   });
 };
-module.exports = { getAllPosts, getPostById, addPost, deletePost, updatePost };
+module.exports = {
+  getAllPosts,
+  getPostById,
+  addPost,
+  deletePost,
+  updatePost,
+  addComment,
+};

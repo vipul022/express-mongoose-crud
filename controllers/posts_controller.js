@@ -4,6 +4,7 @@ const {
   addPost,
   deletePost,
   updatePost,
+  addComment,
 } = require("../utils/posts_utilities");
 
 const getPosts = function (req, res) {
@@ -52,6 +53,22 @@ const makePost = function (req, res) {
   });
 };
 
+const makeComment = function (req, res) {
+  console.log("req in makePost=>", req);
+  // req.body.username = req.user.username;
+  addComment(req)
+    .then((post) => {
+      res.status(200);
+      res.send(post);
+    })
+    .catch((err) => {
+      res.status(400);
+      res.json({
+        error: err.message,
+      });
+    });
+};
+
 const removePost = function (req, res) {
   // execute the query from deletePost
   deletePost(req.params.id).exec((err) => {
@@ -77,4 +94,11 @@ const changePost = function (req, res) {
     }
   });
 };
-module.exports = { getPosts, getPost, makePost, removePost, changePost };
+module.exports = {
+  getPosts,
+  getPost,
+  makePost,
+  removePost,
+  changePost,
+  makeComment,
+};
