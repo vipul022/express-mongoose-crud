@@ -4,6 +4,10 @@ const Post = require("../models/post");
 // return a query
 const getAllPosts = function (req) {
   // console.log("req=>", req);
+  // console.log("req => ", req.query.category);
+  if (req.query.category) {
+    return Post.findByCategory(req.query.category); //this is an Instance/class method
+  }
   return Post.find(); //returns all posts
 };
 

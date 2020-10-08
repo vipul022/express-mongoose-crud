@@ -1,3 +1,5 @@
+const { query } = require("express");
+
 const {
   getAllPosts,
   getPostById,
@@ -9,6 +11,7 @@ const {
 
 const getPosts = function (req, res) {
   // execute the query from getAllPosts
+
   getAllPosts(req)
     .sort({
       //sorting the posts in descending order
@@ -42,6 +45,7 @@ const makePost = function (req, res) {
   // exec function is not used here as this function is returning the Post instance from addPost not the query
   addPost(req).save((err, post) => {
     //saving the Post instance
+
     if (err) {
       res.status(500);
       return res.json({
@@ -59,6 +63,8 @@ const makeComment = function (req, res) {
     .then((post) => {
       res.status(200);
       res.send(post);
+      // res.send(post.narrativeComments());
+      // console.log(post.narrativeComments());
     })
     .catch((err) => {
       res.status(400);

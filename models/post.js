@@ -31,5 +31,14 @@ const Post = new Schema({
     },
   ],
 });
+//Instance method
+Post.methods.narrativeComments = function () {
+  return this.comments.map((com) => `${com.username} says ${com.comment}`); //this is used in makeComment function
+};
+
+//Static/Class method to find post by category
+Post.statics.findByCategory = function (category) {
+  return this.find({ category: category });
+};
 
 module.exports = mongoose.model("Post", Post);
