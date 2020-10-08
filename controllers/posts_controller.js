@@ -54,8 +54,7 @@ const makePost = function (req, res) {
 };
 
 const makeComment = function (req, res) {
-  console.log("req in makePost=>", req);
-  // req.body.username = req.user.username;
+  //addComment returns a promise as it is asycn function so instead of using exec(), we need to use .then here to resolve the promise
   addComment(req)
     .then((post) => {
       res.status(200);

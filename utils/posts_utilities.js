@@ -20,7 +20,7 @@ const addPost = function (req) {
 //add comment to a particular post
 //As is is async, it  will return a promise
 const addComment = async function (req) {
-  console.log("req => ", req);
+  // console.log("req => ", req);
   let post = await Post.findById(req.params.postId); //look up for the particular post
   let newComment = {
     username: req.body.username,

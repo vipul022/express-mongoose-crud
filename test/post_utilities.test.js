@@ -8,6 +8,7 @@ const {
   getPostById,
   deletePost,
   updatePost,
+  addComment,
 } = require("../utils/posts_utilities");
 
 let postId = null; //postId is given a global scope and is used in beforeEach below
@@ -148,6 +149,27 @@ describe("updatePost", () => {
     };
     await updatePost(req).exec((err, post) => {
       expect(post.title).toBe(req.body.title);
+    });
+  });
+});
+
+//addComment returns a promise so .then is used here instead of exec()
+describe.only("addComment", () => {
+  it("should add a comment", async function () {
+    const req = {
+      params: {
+        postId: postId,
+      },
+      body: {
+        username: "vipul",
+        comment: "this is a nice comment!",
+      },
+    };
+
+    await addComment(req).then((post) => {
+      // console.log("post=> ", post);
+      expect(post.comments.length).toBe(1);
+      expect(post.comments[0].username).toBe("vipul");
     });
   });
 });
