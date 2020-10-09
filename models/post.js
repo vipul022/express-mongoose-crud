@@ -16,8 +16,8 @@ const minlengthContent = [30, minlengthErrorMsg];
 const Post = new Schema({
   title: {
     type: String,
-    required: requiredErrorMsg,
-    // minlength: minlengthTitle,
+    required: true,
+    minlength: minlengthTitle,
   },
   create_date: {
     type: Date,
@@ -30,11 +30,11 @@ const Post = new Schema({
   username: {
     type: String,
     required: requiredErrorMsg,
-    minlength: minlengthUsername,
+    // minlength: minlengthUsername,
   },
   content: {
     type: String,
-    required: true,
+    required: requiredErrorMsg,
     // minlength: minlengthContent,
     // maxlength: maxlengthContent,
   },

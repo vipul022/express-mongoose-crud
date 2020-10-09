@@ -73,18 +73,55 @@ after((done) => {
   mongoose.disconnect(() => done());
 });
 
-describe("getAllPosts with one posts", () => {
+describe("getAllPosts", () => {
   it("should get a post if one exist", async function () {
-    let req = {};
+    let req = {
+      query: {},
+    };
+
     await getAllPosts(req).exec((err, posts) => {
+      // console.log("posts=> ", posts.length);
       expect(posts.length).toBe(1);
     });
   });
 
   it("username of the first post should be tester", async function () {
-    let req = {};
+    let req = {
+      query: {},
+    };
     await getAllPosts(req).exec((err, posts) => {
       expect(posts[0].username).toBe("tester");
+    });
+  });
+});
+
+describe.only("get all posts for a particular category", () => {
+  it("should return posts for a particular category", async function () {
+    // Add a post for a category 'code'
+    const date = Date.now();
+    const req = {
+      body: {
+        title: "A categorised post",
+        username: "tester",
+        content: "code!",
+        category: "code",
+        create_date: date,
+        modified_date: date,
+      },
+    };
+
+    //Post.create returns a promise which is resolve bh .then here
+
+    await Post.create(req.body).then(() => {
+      getAllPosts({
+        query: {
+          category: "code",
+        },
+      }).exec((err, posts) => {
+        // Expect to only get the post we just added with the 'code' category - not the one from setup
+        expect(posts.length).toBe(1);
+        expect(posts[0].category).toBe("code");
+      });
     });
   });
 });
@@ -119,6 +156,20 @@ describe("addPost", () => {
       expect(post.title).toBe(req.body.title);
     });
   });
+
+  // it("should fail when title is less than 3 characters", async function () {
+  //   const req = {
+  //     body: {
+  //       title: "nmonww",
+  //       username: "tester",
+  //       content: "This is another blog post!",
+  //       category: "",
+  //     },
+  //   };
+  //   await expect(() => {
+  //     addPost(req).save((err, post));
+  //   }).toThrow();
+  // });
 });
 
 // deletePost
@@ -154,7 +205,7 @@ describe("updatePost", () => {
 });
 
 //addComment returns a promise so .then is used here instead of exec()
-describe.only("addComment", () => {
+describe("addComment", () => {
   it("should add a comment", async function () {
     const req = {
       params: {
