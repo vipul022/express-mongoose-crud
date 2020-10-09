@@ -6,9 +6,10 @@ const getAllPosts = function (req) {
   // console.log("req=>", req);
   // console.log("req => ", req.query.category);
   if (req.query.category) {
-    return Post.findByCategory(req.query.category); //this is an Instance/class method
-  }
-  return Post.find(); //returns all posts
+    return Post.findByCategory(req.query.category); //this is an Instance/class method to find posts by category
+  } else if (req.query.username) {
+    return Post.findByUsername(req.query.username);
+  } else return Post.find(); //returns all posts
 };
 
 // add post
